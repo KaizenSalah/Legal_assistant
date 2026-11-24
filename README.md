@@ -1,144 +1,65 @@
-# AI Legal Assistant - AI-Powered Legal Document Analysis Suite
+# AI Legal Assistant
 
-## Overview
-
-**AI Legal Assistant** is an **Advanced AI-Driven App** designed to assist legal professionals, businesses, and individuals in analyzing legal documents. The application leverages state-of-the-art AI models to provide comprehensive insights, risk assessments, and recommendations based on the content of uploaded legal documents. With features like document analysis, risk scoring, executive summaries, and a built-in legal assistant, AI Legal Assistant streamlines the process of legal document review and decision-making.
+An AI-powered Streamlit application for analyzing legal documents, identifying potential risks, generating structured PDF reports, exporting insights to Google Sheets, and emailing analysis summaries.
 
 ## Features
 
-- **Document Analysis**: Upload PDF or text documents for detailed analysis.
-- **Risk Assessment**: Identify and evaluate potential risks within legal documents.
-- **Executive Summaries**: Generate concise, actionable summaries of document content.
-- **Recommendations**: Receive tailored recommendations for addressing identified risks.
-- **Legal Assistant**: Interact with an AI-powered legal assistant for real-time queries and support.
-- **Report Generation**: Download comprehensive PDF reports summarizing document analysis.
-- **Email Integration**: Send analysis reports and original documents via email directly from the app.
-- **Customizable UI**: A sleek, professional interface with dark mode and custom styling.
+- **Document Upload & Parsing**: Upload PDF or TXT legal documents (up to 10 MB per file) with automatic metadata extraction.
+- **Automated AI Analysis**: Uses Groq LLMs to generate an executive summary, top 5 risk items with severity scores (1–5), and prioritized recommendations.
+- **Interactive Legal Chat**: Ask follow-up questions grounded in the currently selected document or general legal concepts.
+- **PDF Report Generation**: Download formatted PDF analysis reports directly from the sidebar.
+- **Google Sheets Export**: Chunk document text and export structured risk & recommendation rows to a configured Google Sheet.
+- **Email Delivery**: Send the generated PDF report and original document to a recipient via Mailjet.
 
-## Installation
+## Project Structure
 
-To run AI Legal Assistant locally, follow these steps:
+- `app.py` — Main Streamlit application, UI, PDF generation, chat assistant, and Mailjet integration.
+- `Gsheet.py` — LangChain text splitter, Groq risk extraction, and Google Sheets API export.
+- `Legal_summary.ipynb` / `Risk_assessment.ipynb` — Exploratory notebooks for summarization and risk analysis.
+- `tests/test_app.py` — Unit tests for PDF encoding safety and environment configuration guards.
+- `.env.example` — Template of required environment variables.
 
-1. **Clone the Repository**:
+## Setup
+
+1. Clone the repository and enter the project directory:
    ```bash
-   git clone https://github.com/your-repository/legalmind-pro.git
-   cd legalmind-pro
+   cd Legal_assistant
    ```
-
-2. **Set Up Environment Variables**:
-   - Create a `.env` file in the root directory.
-   - Add the following environment variables:
-     ```plaintext
-     groq_api_key=your_groq_api_key
-     EMAIL_API_KEY=your_mailjet_api_key
-     EMAIL_API_SECRET=your_mailjet_api_secret
-     ```
-
-3. **Install Dependencies**:
+2. Copy `.env.example` to `.env` and fill in your credentials:
+   ```bash
+   cp .env.example .env
+   ```
+3. Install Python dependencies:
    ```bash
    pip install -r requirements.txt
    ```
+4. *(Optional)* Place your Google service account JSON file at `gcredentials.json` (gitignored) if you plan to use Google Sheets export.
 
-4. **Run the Application**:
-   ```bash
-   streamlit run app.py
-   ```
+## Environment Variables (`.env`)
 
-5. **Access the Application**:
-   - Open your web browser and navigate to `http://localhost:8501`.
+| Variable | Description |
+| --- | --- |
+| `GROQ_API_KEY` | Groq API key used for document analysis and chat |
+| `EMAIL_API_KEY` | Mailjet API key for sending email reports |
+| `EMAIL_API_SECRET` | Mailjet API secret |
+| `EMAIL_FROM` | Verified sender email address for Mailjet |
+| `GOOGLE_CREDENTIALS_FILE` | Path to Google service account JSON (default: `gcredentials.json`) |
+| `GOOGLE_SPREADSHEET_ID` | Target Google Sheet ID for exporting risk tables |
 
-## Usage
+## Running & Testing
 
-### Uploading Documents
+Start the Streamlit app:
+```bash
+streamlit run app.py
+```
 
-1. **Upload Documents**:
-   - Use the sidebar to upload PDF or text documents.
-   - Multiple documents can be uploaded simultaneously.
+Run the test suite:
+```bash
+pytest
+```
 
-2. **Document Selection**:
-   - Select a document from the sidebar to view its analysis.
+## Security Notes
 
-### Viewing Insights
-
-1. **Metadata**:
-   - View document metadata such as author, creation date, and page count.
-
-2. **Executive Summary**:
-   - Access a concise summary of the document's content.
-
-3. **Risk Assessment**:
-   - Review identified risks with severity scores and explanations.
-
-4. **Recommendations**:
-   - Get detailed recommendations for addressing identified risks.
-
-### Interacting with the Legal Assistant
-
-1. **Chat Interface**:
-   - Use the chat interface to ask legal questions or seek clarification on document content.
-
-2. **Contextual Responses**:
-   - The assistant provides responses based on the content of the selected document.
-
-### Generating Reports
-
-1. **Generate PDF Report**:
-   - Click the "Generate Report" button in the sidebar to create a PDF report.
-
-2. **Download Report**:
-   - Download the generated report for offline use.
-
-3. **Email Report**:
-   - Enter the recipient's email address and send the report directly from the app.
-
-## Technologies Used
-
-- **Streamlit**: For building the web application interface.
-- **Groq API**: For leveraging AI models to analyze documents and provide responses.
-- **PyPDF2**: For extracting text from PDF documents.
-- **NLTK**: For natural language processing tasks.
-- **FPDF**: For generating PDF reports.
-- **Mailjet**: For sending emails with attached reports.
-- **Faker**: For generating fake data (used in development).
-
-## Customization
-
-### UI Customization
-
-The application's UI can be customized by modifying the CSS styles in the `inject_custom_css` function. The current theme features a dark background with golden accents, but you can adjust colors, fonts, and other styles to match your preferences.
-
-### AI Model Configuration
-
-The AI model used for document analysis and chat responses can be configured in the `get_ai_response` function. Currently, the application uses the `mixtral-8x7b-32768` model, but you can switch to other models supported by the Groq API.
-
-## Contributing
-
-We welcome contributions to AI Legal Assistant! If you'd like to contribute, please follow these steps:
-
-1. **Fork the Repository**.
-2. **Create a New Branch**:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. **Make Your Changes**.
-4. **Commit Your Changes**:
-   ```bash
-   git commit -m "Add your commit message here"
-   ```
-5. **Push to the Branch**:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-6. **Open a Pull Request**.
-
-## License
-
-AI Legal Assistant is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Support
-
-For any issues or questions, please open an issue on the GitHub repository or contact the maintainers directly.
-
----
-
-**AI Legal Assistant** is designed to make legal document analysis more efficient and accessible. Whether you're a legal professional or someone dealing with legal documents, this tool aims to provide valuable insights and recommendations to help you make informed decisions.
+- Never commit `.env` or `gcredentials.json` (both are listed in `.gitignore`).
+- HTML output in chat bubbles and email templates is escaped to prevent HTML/script injection.
+- Uploaded files are validated for size (10 MB max) and sanitized filenames before processing.
